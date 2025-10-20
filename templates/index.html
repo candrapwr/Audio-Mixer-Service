@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Audio Mixer Studio</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #0f172a;
+        --bg-card: rgba(15, 23, 42, 0.85);
+        --bg-light: #f8fafc;
+        --bg-card-light: rgba(255, 255, 255, 0.9);
+        --primary: #38bdf8;
+        --primary-dark: #0ea5e9;
+        --text: #f8fafc;
+        --text-muted: rgba(248, 250, 252, 0.75);
+        --text-dark: #1e293b;
+        --border: rgba(148, 163, 184, 0.2);
+        font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 32px 16px;
+        background-repeat: no-repeat;
+      }
+
+      @media (prefers-color-scheme: light) {
+        body {
+          background: linear-gradient(135deg, #e2e8f0, #f8fafc);
+          color: var(--text-dark);
+        }
+      }
+
+      .app-shell {
+        max-width: 960px;
+        width: 100%;
+        backdrop-filter: blur(18px);
+        background-color: var(--bg-card);
+        border-radius: 28px;
+        border: 1px solid var(--border);
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(15, 23, 42, 0.35);
+      }
+
+      @media (prefers-color-scheme: light) {
+        .app-shell {
+          background-color: var(--bg-card-light);
+          box-shadow: 0 16px 40px rgba(148, 163, 184, 0.25);
+        }
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        margin: 0;
+        letter-spacing: -0.03em;
+      }
+
+      p.lead {
+        margin-top: 8px;
+        margin-bottom: 24px;
+        color: var(--text-muted);
+      }
+
+      form {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      label {
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+
+      input[type="file"],
+      input[type="number"] {
+        border-radius: 14px;
+        padding: 14px;
+        border: 1px solid var(--border);
+        background-color: rgba(15, 23, 42, 0.35);
+        color: inherit;
+        transition: border-color 0.2s ease, transform 0.2s ease;
+      }
+
+      @media (prefers-color-scheme: light) {
+        input[type="file"],
+        input[type="number"] {
+          background-color: rgba(255, 255, 255, 0.85);
+        }
+      }
+
+      input[type="file"]:focus,
+      input[type="number"]:focus {
+        outline: none;
+        border-color: var(--primary);
+        transform: translateY(-1px);
+      }
+
+      .full-row {
+        grid-column: 1 / -1;
+      }
+
+      .actions {
+        margin-top: 16px;
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+      }
+
+      button {
+        cursor: pointer;
+        border: none;
+        padding: 14px 22px;
+        border-radius: 16px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      button.primary,
+      .actions .primary {
+        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        color: #0f172a;
+        box-shadow: 0 10px 25px rgba(56, 189, 248, 0.35);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      button.primary:hover,
+      .actions .primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 35px rgba(56, 189, 248, 0.45);
+      }
+
+      button.secondary {
+        background: transparent;
+        color: inherit;
+        border: 1px solid var(--border);
+      }
+
+      .result-card {
+        margin-top: 32px;
+        padding: 24px;
+        border-radius: 20px;
+        border: 1px solid var(--border);
+        background: rgba(15, 23, 42, 0.6);
+        display: none;
+      }
+
+      @media (prefers-color-scheme: light) {
+        .result-card {
+          background: rgba(255, 255, 255, 0.7);
+        }
+      }
+
+      .result-card.visible {
+        display: block;
+      }
+
+      .result-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+
+      .tag {
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        background: rgba(56, 189, 248, 0.2);
+        color: var(--primary);
+        border: 1px solid rgba(56, 189, 248, 0.35);
+      }
+
+      .meta-grid {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        font-size: 0.9rem;
+      }
+
+      .meta-grid span {
+        display: block;
+        color: var(--text-muted);
+      }
+
+      .status {
+        margin-top: 18px;
+        font-size: 0.95rem;
+        color: var(--primary);
+      }
+
+      .advanced-toggle {
+        background: none;
+        border: none;
+        color: var(--primary);
+        font-weight: 600;
+        cursor: pointer;
+        text-align: left;
+        padding: 0;
+        margin-top: 12px;
+      }
+
+      .advanced-grid {
+        display: none;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-top: 16px;
+      }
+
+      .advanced-grid.visible {
+        display: grid;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header>
+        <h1>Audio Mixer Studio</h1>
+        <p class="lead">
+          Padukan musik latar dan voice-over secara instan dengan ducking pintar,
+          fade mulus, dan hasil MP3 siap pakai.
+        </p>
+      </header>
+
+      <form id="mix-form">
+        <div class="field">
+          <label for="music">Musik Latar</label>
+          <input id="music" name="music" type="file" accept=".mp3,.wav,.aac,.m4a" required />
+        </div>
+        <div class="field">
+          <label for="voice">Voice Over</label>
+          <input id="voice" name="voice" type="file" accept=".mp3,.wav,.aac,.m4a" required />
+        </div>
+        <div class="field">
+          <label for="delay_seconds">Delay Voice (detik)</label>
+          <input id="delay_seconds" name="delay_seconds" type="number" min="0" value="5" />
+        </div>
+        <div class="field">
+          <label for="voice_boost_db">Boost Voice (dB)</label>
+          <input id="voice_boost_db" name="voice_boost_db" type="number" value="3" />
+        </div>
+
+        <div class="full-row">
+          <button class="advanced-toggle" type="button" id="advanced-toggle">
+            ⚙️ Kontrol lanjutan
+          </button>
+          <div class="advanced-grid" id="advanced-panel">
+            <div class="field">
+              <label for="duck_db">Ducking Musik (dB)</label>
+              <input id="duck_db" name="duck_db" type="number" value="-10" />
+            </div>
+            <div class="field">
+              <label for="min_silence_ms">Min Silence (ms)</label>
+              <input id="min_silence_ms" name="min_silence_ms" type="number" value="500" />
+            </div>
+            <div class="field">
+              <label for="silence_thresh">Threshold Silence (dB)</label>
+              <input id="silence_thresh" name="silence_thresh" type="number" value="-30" />
+            </div>
+            <div class="field">
+              <label for="fade_in_ms">Fade In Musik (ms)</label>
+              <input id="fade_in_ms" name="fade_in_ms" type="number" value="2000" />
+            </div>
+            <div class="field">
+              <label for="fade_out_ms">Fade Out Akhir (ms)</label>
+              <input id="fade_out_ms" name="fade_out_ms" type="number" value="2000" />
+            </div>
+            <div class="field">
+              <label for="post_voice_duration">Durasi Setelah Voice (ms)</label>
+              <input id="post_voice_duration" name="post_voice_duration" type="number" value="10000" />
+            </div>
+            <div class="field">
+              <label for="transition_ms">Transisi Duck (ms)</label>
+              <input id="transition_ms" name="transition_ms" type="number" value="200" />
+            </div>
+          </div>
+        </div>
+
+        <div class="actions full-row">
+          <button id="reset-btn" class="secondary" type="reset">Reset</button>
+          <button id="submit-btn" class="primary" type="submit">Mix Sekarang</button>
+        </div>
+      </form>
+
+      <div class="result-card" id="result-card">
+        <div class="result-header">
+          <div>
+            <h2 style="margin: 0;">Hasil Mix Siap!</h2>
+            <p class="status" id="status-message"></p>
+          </div>
+          <span class="tag" id="segment-count">0 segmen voice</span>
+        </div>
+
+        <div class="meta-grid">
+          <div>
+            <strong>Durasi Voice</strong>
+            <span id="voice-duration">-</span>
+          </div>
+          <div>
+            <strong>Delay Voice</strong>
+            <span id="voice-delay">-</span>
+          </div>
+          <div>
+            <strong>Boost Voice</strong>
+            <span id="voice-boost">-</span>
+          </div>
+          <div>
+            <strong>Ducking Musik</strong>
+            <span id="duck-info">-</span>
+          </div>
+        </div>
+
+        <div class="actions" style="margin-top: 24px;">
+          <a id="download-link" class="primary" href="#" download>Download MP3</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const form = document.getElementById("mix-form");
+      const submitBtn = document.getElementById("submit-btn");
+      const resultCard = document.getElementById("result-card");
+      const statusMessage = document.getElementById("status-message");
+      const segmentCount = document.getElementById("segment-count");
+      const downloadLink = document.getElementById("download-link");
+      const voiceDuration = document.getElementById("voice-duration");
+      const voiceDelay = document.getElementById("voice-delay");
+      const voiceBoost = document.getElementById("voice-boost");
+      const duckInfo = document.getElementById("duck-info");
+      const advancedToggle = document.getElementById("advanced-toggle");
+      const advancedPanel = document.getElementById("advanced-panel");
+
+      downloadLink.style.display = "none";
+
+      advancedToggle.addEventListener("click", () => {
+        advancedPanel.classList.toggle("visible");
+      });
+
+      form.addEventListener("reset", () => {
+        resultCard.classList.remove("visible");
+        submitBtn.textContent = "Mix Sekarang";
+        submitBtn.disabled = false;
+        downloadLink.style.display = "none";
+      });
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Memproses...";
+        statusMessage.textContent = "Mengunggah & memproses audio...";
+        resultCard.classList.add("visible");
+
+        try {
+          const response = await fetch("/api/mix", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.detail || "Terjadi kesalahan saat mixing.");
+          }
+
+          const data = await response.json();
+          const { metadata, download_url } = data;
+
+          downloadLink.href = download_url;
+          downloadLink.style.display = "inline-flex";
+          statusMessage.textContent = "Mixing selesai. File siap diunduh.";
+
+          voiceDuration.textContent = `${metadata.voice_duration_seconds.toFixed(2)} detik`;
+          voiceDelay.textContent = `${metadata.delay_seconds} detik`;
+          voiceBoost.textContent = `${metadata.voice_boost_db} dB`;
+          duckInfo.textContent = `${metadata.duck_db} dB`;
+
+          const segments = metadata.nonsilent_segments ?? [];
+          segmentCount.textContent = `${segments.length} segmen voice`;
+
+          submitBtn.textContent = "Mix Lagi";
+        } catch (error) {
+          statusMessage.textContent = error.message;
+          downloadLink.style.display = "none";
+          submitBtn.textContent = "Coba Lagi";
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>
