@@ -71,7 +71,7 @@ async def mix_endpoint(
     voice: UploadFile = File(..., description="File voice over (MP3/WAV)"),
     delay_seconds: int = Form(5),
     duck_db: int = Form(-10),
-    silence_thresh: int = Form(-30),
+    silence_thresh: int = Form(-50),
     min_silence_ms: int = Form(500),
     fade_in_ms: int = Form(2000),
     fade_out_ms: int = Form(2000),

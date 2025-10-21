@@ -18,7 +18,7 @@ if __name__ == "__main__":
     parser.add_argument("--output", default="output.mp3", help="Path output MP3")
     parser.add_argument("--delay", default=5, type=int, help="Delay voice dalam detik")
     parser.add_argument("--duck_db", default=-10, type=int, help="Pengurangan volume musik saat voice aktif (dB)")
-    parser.add_argument("--silence_thresh", default=-30, type=int, help="Threshold silence (dB) - lebih rendah = lebih sensitif")
+    parser.add_argument("--silence_thresh", default=-50, type=int, help="Threshold silence (dB) - lebih rendah = lebih sensitif")
     parser.add_argument("--min_silence_ms", default=500, type=int, help="Minimal durasi silence (ms)")
     parser.add_argument("--fade_in_ms", default=2000, type=int, help="Durasi fade-in musik di awal (ms)")
     parser.add_argument("--fade_out_ms", default=2000, type=int, help="Durasi fade-out di akhir (ms)")

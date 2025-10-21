@@ -22,7 +22,7 @@ def mix_audio_segments(
     *,
     delay_seconds: int = 5,
     duck_db: int = -10,
-    silence_thresh: int = -30,
+    silence_thresh: int = -50,
     min_silence_ms: int = 500,
     fade_in_ms: int = 2000,
     fade_out_ms: int = 2000,
