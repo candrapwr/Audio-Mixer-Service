@@ -1,6 +1,25 @@
-# Audio Mixer Service
+<div align="center">
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# 🎚️ Audio Mixer Service
+
+**Studio audio kecil berbasis Python untuk memadukan background music & voice-over secara otomatis.**
+
+CLI tool untuk kreator solo + REST API & web UI (FastAPI) untuk tim kreatif yang butuh mixing terstruktur & paralel.
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![Python](https://img.shields.io/badge/python-3.12+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-REST-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![pydub](https://img.shields.io/badge/pydub-audio-FF6B6B.svg)](https://github.com/jiaaro/pydub)
+[![FFmpeg](https://img.shields.io/badge/FFmpeg-required-007808?logo=ffmpeg&logoColor=white)](#menjalankan-sebagai-rest-api--web-ui)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#)
+[![Status](https://img.shields.io/badge/status-aktif_maintained-success.svg)](#)
+[![Stars](https://img.shields.io/github/stars/candrapwr/Audio-Mixer-Service?style=social&label=Star)](https://github.com/candrapwr/Audio-Mixer-Service/stargazers)
+
+</div>
+
+---
+
+> 🌐 Bagian dari **Ekosistem Siber** — dibangun & dirawat oleh **dataSiberLab**.
 
 ## Pengantar
 
@@ -203,4 +222,16 @@ Untuk pertanyaan atau dukungan, hubungi: [candrapwr@datasiber.com](mailto:candra
 
 ## Lisensi
 
-Proyek ini dilisensikan di bawah [MIT License](https://opensource.org/licenses/MIT). Anda bebas menggunakan, memodifikasi, dan mendistribusikan kode ini untuk tujuan pribadi atau komersial, dengan syarat menyertakan pemberitahuan hak cipta asli.
+Proyek ini dilisensikan di bawah **MIT License**. Lihat [LICENSE](./LICENSE). Anda bebas menggunakan, memodifikasi, dan mendistribusikan kode ini untuk tujuan pribadi atau komersial, dengan syarat menyertakan pemberitahuan hak cipta asli.
+
+---
+
+<div align="center">
+
+**Dibuat dengan ❤️ oleh [dataSiberLab](https://datasiber.com)**
+
+📧 [candrapwr@datasiber.com](mailto:candrapwr@datasiber.com) · 🌐 [datasiber.com](https://datasiber.com)
+
+Audio Mixer Service berguna? ⭐ Star repo-nya!
+
+</div>
