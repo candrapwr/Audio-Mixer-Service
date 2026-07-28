@@ -235,3 +235,5 @@ Proyek ini dilisensikan di bawah **MIT License**. Lihat [LICENSE](./LICENSE). An
 Audio Mixer Service berguna? ⭐ Star repo-nya!
 
 </div>
+
+<!-- repo: Audio-Mixer-Service · dataSiberLab · 2026 -->
